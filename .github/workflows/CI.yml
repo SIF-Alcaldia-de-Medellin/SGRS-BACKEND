@@ -5,7 +5,7 @@ name: Pipeline CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
     types: [opened, synchronize, reopened, closed, review_requested]
     branches: [ "main" ]
