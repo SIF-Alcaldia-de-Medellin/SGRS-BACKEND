@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
+    allConfig: js.configs.all,
 });
 
 export default [{
@@ -32,8 +32,8 @@ export default [{
         sourceType: "module",
 
         parserOptions: {
-            project: "tsconfig.json",
-            tsconfigRootDir: "C:\\Users\\juans\\Documents\\Alcaldia\\Repositorios\\manager-service",
+            project: path.resolve(__dirname, "./tsconfig.json"), // Correct the path here
+            tsconfigRootDir: __dirname, // Ensure it's relative to the current directory
         },
     },
 
