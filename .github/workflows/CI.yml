@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-
+    name: CI
     runs-on: ubuntu-latest
 
     steps:
@@ -33,3 +33,21 @@ jobs:
         
       - name: Run tests 
         run: npm run test
+
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
+      - name: Install dependencies
+        run: npm install
+      - name: Test and coverage
+        run: npm run test:cov
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+
+
