@@ -75,6 +75,93 @@ describe('SolicitudService', () => {
     });
   });
 
+  describe('getSolicitudesAprobadas', () => {
+    it('debería obtener todas las solicitudes aprobadas', async () => {
+      mockSolicitudRepo.find.mockResolvedValue([
+        { id_solicitudes: 1, Estado: 1, purpose: 'Reunión 1' },
+        { id_solicitudes: 2, Estado: 1, purpose: 'Reunión 2' },
+      ]);
+
+      const result = await service.getSolicitudesAprobadas();
+
+      expect(result).toHaveLength(2);
+      expect(result[0].Estado).toBe(1);
+      expect(result[1].Estado).toBe(1);
+      expect(solicitudRepo.find).toHaveBeenCalledWith({
+        where: { Estado: 1 },
+      });
+    });
+
+    it('debería retornar lista vacía si no hay solicitudes aprobadas', async () => {
+      mockSolicitudRepo.find.mockResolvedValue([]);
+
+      const result = await service.getSolicitudesAprobadas();
+
+      expect(result).toEqual([]);
+      expect(solicitudRepo.find).toHaveBeenCalledWith({
+        where: { Estado: 1 },
+      });
+    });
+  });
+
+  describe('getSolicitudesNoAprobadas', () => {
+    it('debería obtener todas las solicitudes no aprobadas', async () => {
+      mockSolicitudRepo.find.mockResolvedValue([
+        { id_solicitudes: 3, Estado: 0, purpose: 'Reunión 3' },
+        { id_solicitudes: 4, Estado: 0, purpose: 'Reunión 4' },
+      ]);
+
+      const result = await service.getSolicitudesNoAprobadas();
+
+      expect(result).toHaveLength(2);
+      expect(result[0].Estado).toBe(0);
+      expect(result[1].Estado).toBe(0);
+      expect(solicitudRepo.find).toHaveBeenCalledWith({
+        where: { Estado: 0 },
+      });
+    });
+
+    it('debería retornar lista vacía si no hay solicitudes no aprobadas', async () => {
+      mockSolicitudRepo.find.mockResolvedValue([]);
+
+      const result = await service.getSolicitudesNoAprobadas();
+
+      expect(result).toEqual([]);
+      expect(solicitudRepo.find).toHaveBeenCalledWith({
+        where: { Estado: 0 },
+      });
+    });
+  });
+
+  describe('getSolicitudesEnEspera', () => {
+    it('debería obtener todas las solicitudes en espera', async () => {
+      mockSolicitudRepo.find.mockResolvedValue([
+        { id_solicitudes: 5, Estado: 2, purpose: 'Reunión 5' },
+        { id_solicitudes: 6, Estado: 2, purpose: 'Reunión 6' },
+      ]);
+
+      const result = await service.getSolicitudesEnEspera();
+
+      expect(result).toHaveLength(2);
+      expect(result[0].Estado).toBe(2);
+      expect(result[1].Estado).toBe(2);
+      expect(solicitudRepo.find).toHaveBeenCalledWith({
+        where: { Estado: 2 },
+      });
+    });
+
+    it('debería retornar lista vacía si no hay solicitudes en espera', async () => {
+      mockSolicitudRepo.find.mockResolvedValue([]);
+
+      const result = await service.getSolicitudesEnEspera();
+
+      expect(result).toEqual([]);
+      expect(solicitudRepo.find).toHaveBeenCalledWith({
+        where: { Estado: 2 },
+      });
+    });
+  });
+
   describe('getSolicitudById', () => {
     it('debería obtener una solicitud por ID', async () => {
       mockSolicitudRepo.findOne.mockResolvedValue({ id: 1, Estado: 2 });
